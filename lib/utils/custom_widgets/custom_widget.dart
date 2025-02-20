@@ -6,14 +6,13 @@ import 'package:mode_gallery/utils/app_colors.dart';
 import 'package:mode_gallery/utils/app_sizes.dart';
 import 'package:shimmer/shimmer.dart';
 
-class CustomWidget{
-  static customAppBar({
-    Color? color,
-     Widget? leading,
-    required String title,
-    List<Widget>? actionButtons
-  }){
-    return  Container(
+class CustomWidget {
+  static customAppBar(
+      {Color? color,
+      Widget? leading,
+      required String title,
+      List<Widget>? actionButtons}) {
+    return Container(
       height: AppSizes().appBarHeight,
       width: ScreenUtil().screenWidth,
       padding: EdgeInsets.only(top: 15.h),
@@ -23,36 +22,39 @@ class CustomWidget{
             bottomRight: Radius.circular(AppSizes().bodyCurveRadius),
             bottomLeft: Radius.circular(AppSizes().bodyCurveRadius),
           ),
-          gradient: LinearGradient(
-              colors: [
-                AppColors.appBarColor,
-                AppColors.appBarColor,
-                AppColors.blueColor,
-                AppColors.blueColor,
-              ]
-          )
-      ),
-      child:  Row(
+          gradient: LinearGradient(colors: [
+            AppColors.appBarColor,
+            AppColors.appBarColor,
+            AppColors.blueColor,
+            AppColors.blueColor,
+          ])),
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(width: 10.w),
           leading ?? SizedBox(width: 16.w),
           const Spacer(),
-          Text(title, style: TextStyle(color: AppColors.appBarTitleColor, fontSize: 18.sp, fontWeight: FontWeight.w600)),
+          Text(title,
+              style: TextStyle(
+                  color: AppColors.appBarTitleColor,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600)),
           const Spacer(),
-          actionButtons ==null || actionButtons.isEmpty ? SizedBox(width: 25.w):Row(
-            children: actionButtons,
-          ),
+          actionButtons == null || actionButtons.isEmpty
+              ? SizedBox(width: 25.w)
+              : Row(
+                  children: actionButtons,
+                ),
           SizedBox(width: 10.w),
-
         ],
       ),
     );
   }
 
   static imageBuilder({required String url, required bool circularImage}) {
-    if (url.startsWith("http")) {
+    print("object === ${url}");
+    if (url.startsWith("http") || url.startsWith("https")) {
       return Container(
         alignment: Alignment.center,
         clipBehavior: circularImage ? Clip.antiAlias : Clip.none,
@@ -69,12 +71,16 @@ class CustomWidget{
           placeholder: (context, url) {
             return CustomWidget.buildSimmer();
           },
-          errorWidget: (context, url, error) => const Center(child: Icon(Icons.error)),
+          errorWidget: (context, url, error) =>
+              const Center(child: Icon(Icons.error)),
         ),
       );
     }
 
-    if (url.endsWith(".png") || url.endsWith(".jpg") || url.endsWith(".jpeg") || url.endsWith(".gif")) {
+    if (url.endsWith(".png") ||
+        url.endsWith(".jpg") ||
+        url.endsWith(".jpeg") ||
+        url.endsWith(".gif")) {
       return Container(
         alignment: Alignment.center,
         clipBehavior: circularImage ? Clip.antiAlias : Clip.none,
@@ -109,7 +115,8 @@ class CustomWidget{
     );
   }
 
-  static backButton({required BuildContext context, required void Function() onTap}) {
+  static backButton(
+      {required BuildContext context, required void Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Icon(
@@ -120,7 +127,7 @@ class CustomWidget{
     );
   }
 
-  static loadingWidget({String? loadingText}){
+  static loadingWidget({String? loadingText}) {
     // return SpinKitPumpingHeart(
     //   size: 100.h,
     //   color: AppColors.appBarColor,
@@ -130,42 +137,49 @@ class CustomWidget{
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       // width: 200.w,
       decoration: BoxDecoration(
-        color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(10.r)
-      ),
+          color: AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(10.r)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircularProgressIndicator(color: AppColors.blueColor,semanticsLabel: "semanticsLabel",),
-          SizedBox(width: 30.w,),
-          Text(loadingText ?? "Loading", style: TextStyle(color: AppColors.blackColor, fontSize: 16.sp),),
+          CircularProgressIndicator(
+            color: AppColors.blueColor,
+            semanticsLabel: "semanticsLabel",
+          ),
+          SizedBox(
+            width: 30.w,
+          ),
+          Text(
+            loadingText ?? "Loading",
+            style: TextStyle(color: AppColors.blackColor, fontSize: 16.sp),
+          ),
         ],
       ),
     );
   }
 
-  static appBarMenuButton({required void Function() onTap}){
+  static appBarMenuButton({required void Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: AppSizes().appBarButtonSize,
-        width: AppSizes().appBarButtonSize,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.appBarColor,
-            boxShadow: [
-              BoxShadow(
-                  offset: const Offset(-2, -2),
-                  color: AppColors.appBarTitleColor,
-                  blurRadius: 12.r,
-                  spreadRadius: 1.r
-              )
-            ]
-        ),
-        child: Icon( Icons.more_vert,color: AppColors.appBarTitleColor,)
-      ),
+          height: AppSizes().appBarButtonSize,
+          width: AppSizes().appBarButtonSize,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.appBarColor,
+              boxShadow: [
+                BoxShadow(
+                    offset: const Offset(-2, -2),
+                    color: AppColors.appBarTitleColor,
+                    blurRadius: 12.r,
+                    spreadRadius: 1.r)
+              ]),
+          child: Icon(
+            Icons.more_vert,
+            color: AppColors.appBarTitleColor,
+          )),
     );
   }
 
@@ -178,18 +192,18 @@ class CustomWidget{
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: AppColors.appBarColor,
-            boxShadow:[
+            boxShadow: [
               BoxShadow(
                 color: AppColors.appBarTitleColor,
-                offset: Offset(
-                    0.h, 0.h
-                ),
+                offset: Offset(0.h, 0.h),
                 blurRadius: 10.r,
                 spreadRadius: 5.r,
               ),
-            ]
+            ]),
+        child: Icon(
+          Icons.file_download_outlined,
+          color: AppColors.appBarTitleColor,
         ),
-        child: Icon(Icons.file_download_outlined, color: AppColors.appBarTitleColor,),
       ),
     );
   }
@@ -201,18 +215,18 @@ class CustomWidget{
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.appBarColor,
-          boxShadow:[
+          boxShadow: [
             BoxShadow(
               color: AppColors.appBarTitleColor,
-              offset: Offset(
-                  0.h, 0.h
-              ),
+              offset: Offset(0.h, 0.h),
               blurRadius: 10.r,
               spreadRadius: 5.r,
             ),
-          ]
+          ]),
+      child: Icon(
+        Icons.favorite_border_outlined,
+        color: AppColors.appBarTitleColor,
       ),
-      child: Icon(Icons.favorite_border_outlined, color: AppColors.appBarTitleColor,),
     );
   }
 
@@ -223,33 +237,35 @@ class CustomWidget{
       decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: AppColors.appBarColor,
-          boxShadow:[
+          boxShadow: [
             BoxShadow(
               color: AppColors.appBarTitleColor,
-              offset: Offset(
-                0.h, 0.h
-              ),
+              offset: Offset(0.h, 0.h),
               blurRadius: 10.r,
               spreadRadius: 5.r,
             ),
-          ]
+          ]),
+      child: Icon(
+        Icons.settings_cell_rounded,
+        color: AppColors.appBarTitleColor,
       ),
-      child: Icon(Icons.settings_cell_rounded, color: AppColors.appBarTitleColor,),
     );
   }
 
-  static watchAdPopupWidget({required BuildContext context, required void Function() showAd}){
+  static watchAdPopupWidget(
+      {required BuildContext context, required void Function() showAd}) {
     return showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return AlertDialog(
             title: Center(
-                child:Text(
-                  AppConstant.disclaimer,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.blackColor
-                  ),
-                ),
+              child: Text(
+                AppConstant.disclaimer,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall
+                    ?.copyWith(color: AppColors.blackColor),
+              ),
             ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
@@ -258,9 +274,10 @@ class CustomWidget{
               children: [
                 Text(
                   AppConstant.watchAdToDownloadImage,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.blackColor
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall
+                      ?.copyWith(color: AppColors.blackColor),
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -271,27 +288,28 @@ class CustomWidget{
                         actionTitle: "Cancel",
                         onTap: () {
                           Navigator.pop(context);
-                          },
-                        context: context
-                    ),
+                        },
+                        context: context),
                     button(
                         actionTitle: "OK",
                         onTap: () {
                           showAd();
                         },
-                        context: context
-                    ),
+                        context: context),
                   ],
                 ),
-
               ],
             ),
           );
-        }
-    );
+        });
   }
 
-  static button({required BuildContext context,required String actionTitle, double? height, double? width,required void Function() onTap}) {
+  static button(
+      {required BuildContext context,
+      required String actionTitle,
+      double? height,
+      double? width,
+      required void Function() onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -303,13 +321,14 @@ class CustomWidget{
         ),
         child: Center(
             child: Text(
-              actionTitle,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.whiteColor),
-              textAlign: TextAlign.center,
-            )
-        ),
+          actionTitle,
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: AppColors.whiteColor),
+          textAlign: TextAlign.center,
+        )),
       ),
     );
   }
-
 }

@@ -14,19 +14,22 @@ import 'package:mode_gallery/utils/app_sizes.dart';
 import 'package:mode_gallery/utils/custom_widgets/custom_widget.dart';
 
 class FullScreenImageViewScreen extends StatefulWidget {
- final ImageData imageData;
- final int index;
+  final ImageData imageData;
+  final int index;
 
-  const FullScreenImageViewScreen({super.key, required this.imageData, required this.index});
+  const FullScreenImageViewScreen(
+      {super.key, required this.imageData, required this.index});
 
   @override
-  State<FullScreenImageViewScreen> createState() => _FullScreenImageViewScreenState();
+  State<FullScreenImageViewScreen> createState() =>
+      _FullScreenImageViewScreenState();
 }
 
 class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
-  WallpaperSettingController wallpaperSettingController = Get.put(WallpaperSettingController());
+  WallpaperSettingController wallpaperSettingController =
+      Get.put(WallpaperSettingController());
   int selectedIndex = 10;
-   PageController? controller;
+  PageController? controller;
 
   static const AdRequest request = AdRequest(
     keywords: <String>['foo', 'bar'],
@@ -45,8 +48,6 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
   NativeAd? _nativeAd;
   bool _nativeAdIsLoaded = false;
   String _adUnitId = "ca-app-pub-3940256099942544/2247696110";
-
-
 
   /// Loads a banner ad.
   void loadBannerAd() {
@@ -79,7 +80,7 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
     )..load();
   }
 
- /// Loads a native ad.
+  /// Loads a native ad.
   void loadNativeAd() {
     _nativeAd = NativeAd(
         adUnitId: _adUnitId,
@@ -99,7 +100,7 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
         request: const AdRequest(),
         // Styling
         nativeTemplateStyle: NativeTemplateStyle(
-          // Required: Choose a template.
+            // Required: Choose a template.
             templateType: TemplateType.small,
             // Optional: Customize the ad's style.
             mainBackgroundColor: Colors.purple,
@@ -126,8 +127,6 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 size: 16.0)))
       ..load();
   }
- 
-
 
   @override
   void initState() {
@@ -139,34 +138,31 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
     super.initState();
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          backgroundColor: AppColors.appBackgroundColor,
-          appBar: AppBar(
-            leading: GestureDetector(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Icon(Icons.arrow_back_ios,color: AppColors.appBarTitleColor,)
-              ),
-            title: Text(
-              widget.imageData.categoryTitle??'',
-              style: TextStyle(
-                color: AppColors.appBarTitleColor
-              ),
-              ),
-            backgroundColor: AppColors.appBarColor,
-          ),
-          body: buildBody(context),
-        )
-    );
+      backgroundColor: AppColors.appBackgroundColor,
+      appBar: AppBar(
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: AppColors.appBarTitleColor,
+            )),
+        title: Text(
+          widget.imageData.categoryTitle ?? '',
+          style: TextStyle(color: AppColors.appBarTitleColor),
+        ),
+        backgroundColor: AppColors.appBarColor,
+      ),
+      body: buildBody(context),
+    ));
   }
 
- Widget buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Stack(
       children: [
         buildImageWidget(),
@@ -185,44 +181,40 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
         //     ),
         //   ),
         // ),
-        GetBuilder<WallpaperSettingController>(
-          builder: (context) {
-            return Visibility(
-              visible: wallpaperSettingController.isLoading,
-              child: Container(
-                color: AppColors.transparentColor,
-                height: ScreenUtil().screenHeight,
-                width: ScreenUtil().screenWidth,
-                child: Center(
-                  child: CustomWidget.loadingWidget(loadingText: wallpaperSettingController.loadingText),
-                ),
+        GetBuilder<WallpaperSettingController>(builder: (context) {
+          return Visibility(
+            visible: wallpaperSettingController.isLoading,
+            child: Container(
+              color: AppColors.transparentColor,
+              height: ScreenUtil().screenHeight,
+              width: ScreenUtil().screenWidth,
+              child: Center(
+                child: CustomWidget.loadingWidget(
+                    loadingText: wallpaperSettingController.loadingText),
               ),
-            );
-          }
-        ),
-      
+            ),
+          );
+        }),
       ],
     );
- }
-  Widget customAppBar(){
+  }
+
+  Widget customAppBar() {
     return Container(
       height: AppSizes().appBarHeight,
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
-        color: AppColors.appBarColor.withOpacity(0.5),
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(AppSizes().bodyCurveRadius),
-          bottomLeft: Radius.circular(AppSizes().bodyCurveRadius),
-        ),
-        gradient: LinearGradient(
-          colors: [
+          color: AppColors.appBarColor.withOpacity(0.5),
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(AppSizes().bodyCurveRadius),
+            bottomLeft: Radius.circular(AppSizes().bodyCurveRadius),
+          ),
+          gradient: LinearGradient(colors: [
             AppColors.appBarColor,
             AppColors.appBarColor,
             AppColors.blueColor,
             AppColors.blueColor,
-          ]
-        )
-      ),
+          ])),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -239,13 +231,11 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                       offset: const Offset(-2, -2),
                       color: AppColors.appBarTitleColor,
                       blurRadius: 12.r,
-                      spreadRadius: 1.r
-                  )
-                ]
-            ),
+                      spreadRadius: 1.r)
+                ]),
             child: CustomWidget.backButton(
               context: context,
-              onTap: ()=> Navigator.pop(context),
+              onTap: () => Navigator.pop(context),
             ),
           ),
           const Spacer(),
@@ -261,9 +251,7 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 widget.imageData.categoryTitle!,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                    color: AppColors.appBarTitleColor,
-                    fontSize: 20.sp
-                ),
+                    color: AppColors.appBarTitleColor, fontSize: 20.sp),
               ),
             ),
           ),
@@ -277,14 +265,16 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
         ],
       ),
     );
-}
+  }
 
   Widget buildImageWidget() {
     return Column(
       children: [
-        SizedBox(height: 5.h,),
+        SizedBox(
+          height: 5.h,
+        ),
         Visibility(
-          visible: _isLoaded == true && _bannerAd!=null,
+          visible: _isLoaded == true && _bannerAd != null,
           child: Container(
             height: _bannerAd!.size.height.toDouble(),
             width: _bannerAd!.size.width.toDouble(),
@@ -292,7 +282,9 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
             child: AdWidget(ad: _bannerAd!),
           ),
         ),
-        SizedBox(height: 5.h,),
+        SizedBox(
+          height: 5.h,
+        ),
         Expanded(
           child: PageView.builder(
             allowImplicitScrolling: true,
@@ -300,37 +292,59 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
             controller: controller,
             itemBuilder: (BuildContext context, int itemIndex) {
               return GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     selectedIndex = itemIndex;
-                    },
-                  child: buildCarouselItem(context, itemIndex)
-              );
-              },
-            onPageChanged: (index){
+                  },
+                  child: buildCarouselItem(context, itemIndex));
+            },
+            onPageChanged: (index) {
               selectedIndex = index;
-              },
+            },
           ),
         ),
-        SizedBox(height: 10.h,),
+        SizedBox(
+          height: 10.h,
+        ),
         Visibility(
           visible: _nativeAdIsLoaded && _nativeAd != null,
           child: Container(
-            margin: EdgeInsets.only(bottom: 10.h),
-            height: 80.h,
-            color: AppColors.appBarColor,
-            child: AdWidget(ad: _nativeAd!)
-          ),
+              margin: EdgeInsets.only(bottom: 10.h),
+              height: 80.h,
+              color: AppColors.appBarColor,
+              child: AdWidget(ad: _nativeAd!)),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            CustomWidget.button(context: context, actionTitle: "Set \nWallpaper", onTap: (){openBottomMenu();},height: 40.h, width: 100.w),
-            CustomWidget.button(context: context, actionTitle: "Preview", onTap: (){openPreview();},height: 40.h, width: 100.w),
-            CustomWidget.button(context: context, actionTitle: "Download \nImage", onTap: (){openBottomMenu();},height: 40.h, width: 100.w),
+            CustomWidget.button(
+                context: context,
+                actionTitle: "Set \nWallpaper",
+                onTap: () {
+                  openBottomMenu();
+                },
+                height: 40.h,
+                width: 100.w),
+            CustomWidget.button(
+                context: context,
+                actionTitle: "Preview",
+                onTap: () {
+                  openPreview();
+                },
+                height: 40.h,
+                width: 100.w),
+            CustomWidget.button(
+                context: context,
+                actionTitle: "Download \nImage",
+                onTap: () {
+                  openBottomMenu();
+                },
+                height: 40.h,
+                width: 100.w),
           ],
         ),
-        SizedBox(height: 10.h,)
-
+        SizedBox(
+          height: 10.h,
+        )
       ],
     );
   }
@@ -340,137 +354,141 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
       backgroundColor: AppColors.transparentColor,
       context: context,
       builder: (BuildContext context) {
-          return Container(
-            width: ScreenUtil().screenWidth,
-            padding: EdgeInsets.only(top: 10.h),
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [
-                      AppColors.gradientColor3,
-                      AppColors.gradientColor1,
-                    ]
-                )
-            ),
-            child:  Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children:[
-                Center(
-                  child: Text(
-                      AppConstant.bottomModelSheetTitle.toUpperCase(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 19.sp, color: AppColors.appBarColor, fontWeight: FontWeight.w800)
-                  ),
-                ),
-                SizedBox(height: 5.h),
-                Divider(color: AppColors.blueColor,height: 5.h,thickness: 1.h),
-                buildActionButton(
-                  title: AppConstant.setOnHomeScreen,
-                  callBack: (){
-                    Navigator.pop(context);
-                    if(rewardedAd!=null){
-                      showRewardedAd(id: AsyncWallpaper.HOME_SCREEN);
-                    }else{
-                      setWallpaper(wallPaperLocation: AsyncWallpaper.HOME_SCREEN);
-                    }
-                  },
-                  iconData: Icons.home,
-                ),
-                Divider(color: AppColors.blueColor,height: 5.h,thickness: 1.h),
-                buildActionButton(
-                  title: AppConstant.setOnLockScreen,
-                  callBack: (){
-                    Navigator.pop(context);
-                    if(rewardedAd!=null){
-                      showRewardedAd(id: AsyncWallpaper.LOCK_SCREEN);
-                    }else{
-                      setWallpaper(wallPaperLocation: AsyncWallpaper.LOCK_SCREEN);
-                    }
-                  },
-                  iconData: Icons.lock_clock_rounded,
-                ),
-                Divider(color: AppColors.blueColor,height: 5.h,thickness: 1.h),
-                buildActionButton(
-                  title: AppConstant.setOnBothScreen,
-                  callBack: (){
-                    Navigator.pop(context);
-                    if(rewardedAd!=null){
-                      showRewardedAd(id: AsyncWallpaper.BOTH_SCREENS);
-                    }else{
-                      setWallpaper(wallPaperLocation: AsyncWallpaper.BOTH_SCREENS);
-                    }
-                  },
-                  iconData: Icons.home_work,
-                ),
-                Divider(color: AppColors.blueColor,height: 5.h,thickness: 1.h),
-                buildActionButton(
-                  title:AppConstant.downloadImage,
-                  callBack: (){
-                    Navigator.pop(context);
-                    CustomWidget.watchAdPopupWidget(
-                        context: context,
-                        showAd: () {
-                          if(rewardedAd!=null){
-                            showRewardedAd(id: 10);
-                          } else{
-                            downloadImage();
-                          }
+        return Container(
+          width: ScreenUtil().screenWidth,
+          padding: EdgeInsets.only(top: 10.h),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(colors: [
+            AppColors.gradientColor3,
+            AppColors.gradientColor1,
+          ])),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Text(AppConstant.bottomModelSheetTitle.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 19.sp,
+                        color: AppColors.appBarColor,
+                        fontWeight: FontWeight.w800)),
+              ),
+              SizedBox(height: 5.h),
+              Divider(color: AppColors.blueColor, height: 5.h, thickness: 1.h),
+              buildActionButton(
+                title: AppConstant.setOnHomeScreen,
+                callBack: () {
+                  Navigator.pop(context);
+                  if (rewardedAd != null) {
+                    showRewardedAd(id: AsyncWallpaper.HOME_SCREEN);
+                  } else {
+                    setWallpaper(wallPaperLocation: AsyncWallpaper.HOME_SCREEN);
+                  }
+                },
+                iconData: Icons.home,
+              ),
+              Divider(color: AppColors.blueColor, height: 5.h, thickness: 1.h),
+              buildActionButton(
+                title: AppConstant.setOnLockScreen,
+                callBack: () {
+                  Navigator.pop(context);
+                  if (rewardedAd != null) {
+                    showRewardedAd(id: AsyncWallpaper.LOCK_SCREEN);
+                  } else {
+                    setWallpaper(wallPaperLocation: AsyncWallpaper.LOCK_SCREEN);
+                  }
+                },
+                iconData: Icons.lock_clock_rounded,
+              ),
+              Divider(color: AppColors.blueColor, height: 5.h, thickness: 1.h),
+              buildActionButton(
+                title: AppConstant.setOnBothScreen,
+                callBack: () {
+                  Navigator.pop(context);
+                  if (rewardedAd != null) {
+                    showRewardedAd(id: AsyncWallpaper.BOTH_SCREENS);
+                  } else {
+                    setWallpaper(
+                        wallPaperLocation: AsyncWallpaper.BOTH_SCREENS);
+                  }
+                },
+                iconData: Icons.home_work,
+              ),
+              Divider(color: AppColors.blueColor, height: 5.h, thickness: 1.h),
+              buildActionButton(
+                title: AppConstant.downloadImage,
+                callBack: () {
+                  Navigator.pop(context);
+                  CustomWidget.watchAdPopupWidget(
+                      context: context,
+                      showAd: () {
+                        if (rewardedAd != null) {
+                          showRewardedAd(id: 10);
+                        } else {
+                          downloadImage();
                         }
-                    );
-                  },
-                  iconData:Icons.save_alt_rounded,
-                ),
-                Divider(color: AppColors.blueColor,height: 5.h,thickness: 1.h),
-                SizedBox(height: 10.h),
-              ],
-            ),
-          );
+                      });
+                },
+                iconData: Icons.save_alt_rounded,
+              ),
+              Divider(color: AppColors.blueColor, height: 5.h, thickness: 1.h),
+              SizedBox(height: 10.h),
+            ],
+          ),
+        );
       },
     );
   }
 
-  Widget buildActionButton({required String title, required Callback callBack, required IconData iconData}) {
-  return GestureDetector(
-     onTap: (){
-       callBack();
-     },
-     child: Container(
-       color: AppColors.transparentColor,
-       padding: EdgeInsets.symmetric(horizontal: 20.w,),
-       child: Row(
-         children: [
-           Container(
-             padding: EdgeInsets.all(10.h),
-             decoration: BoxDecoration(
-                 shape: BoxShape.circle,
-                 color: AppColors.appBarColor.withOpacity(0.4)
-             ),
-             child: Center(
-               child: Icon(
-                 iconData,
-                 color: AppColors.bottomBarIconColor,
-                 size: 20.h,
-               ),
-             ),
-           ),
-           SizedBox(width: 10.w),
-           Text(title, style: TextStyle(fontSize: 16.sp, color: AppColors.bottomBarButtonColor)),
-           const Spacer(),
-           Icon(Icons.arrow_forward_ios_rounded, color: AppColors.bottomBarIconColor,size: 15.h),
-         ],
-       ),
-     ),
-   );
- }
+  Widget buildActionButton(
+      {required String title,
+      required Callback callBack,
+      required IconData iconData}) {
+    return GestureDetector(
+      onTap: () {
+        callBack();
+      },
+      child: Container(
+        color: AppColors.transparentColor,
+        padding: EdgeInsets.symmetric(
+          horizontal: 20.w,
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(10.h),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.appBarColor.withOpacity(0.4)),
+              child: Center(
+                child: Icon(
+                  iconData,
+                  color: AppColors.bottomBarIconColor,
+                  size: 20.h,
+                ),
+              ),
+            ),
+            SizedBox(width: 10.w),
+            Text(title,
+                style: TextStyle(
+                    fontSize: 16.sp, color: AppColors.bottomBarButtonColor)),
+            const Spacer(),
+            Icon(Icons.arrow_forward_ios_rounded,
+                color: AppColors.bottomBarIconColor, size: 15.h),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget buildCarouselItem(BuildContext context, int itemIndex) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: CustomWidget.imageBuilder(
           url: widget.imageData.categoryImages![itemIndex],
-          circularImage: false
-      ),
+          circularImage: false),
     );
   }
 
@@ -490,7 +508,7 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
             print('RewardedAd failed to load: $error');
             rewardedAd = null;
             numRewardedLoadAttempts += 1;
-            if (numRewardedLoadAttempts <maxFailedLoadAttempts) {
+            if (numRewardedLoadAttempts < maxFailedLoadAttempts) {
               createRewardedAd();
             }
           },
@@ -506,7 +524,6 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
       onAdShowedFullScreenContent: (RewardedAd ad) {
         print('ad onAdShowedFullScreenContent.');
       },
-
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
         ad.dispose();
@@ -521,20 +538,19 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
     );
 
     rewardedAd!.setImmersiveMode(true);
-    rewardedAd!.show(
-        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-          print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-          print("=================== object ad closed ====================");
-          if(id==10){
-            downloadImage();
-          }else{
-            setWallpaper(wallPaperLocation: id);
-          }
-          if(reward.amount>1){
-            rewardEarned = true;
-            setState(() {});
-          }
-        });
+    rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+      print("=================== object ad closed ====================");
+      if (id == 10) {
+        downloadImage();
+      } else {
+        setWallpaper(wallPaperLocation: id);
+      }
+      if (reward.amount > 1) {
+        rewardEarned = true;
+        setState(() {});
+      }
+    });
     rewardedAd = null;
   }
 
@@ -547,19 +563,19 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
   void setWallpaper({required int wallPaperLocation}) {
     wallpaperSettingController.setAsWallpaper(
         imageUrl: widget.imageData.categoryImages![selectedIndex],
-        wallpaperLocation: wallPaperLocation
-    );
+        wallpaperLocation: wallPaperLocation);
   }
-  
+
   void openPreview() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return  Dialog(imageUrl: widget.imageData.categoryImages![selectedIndex],);
+        return Dialog(
+          imageUrl: widget.imageData.categoryImages![selectedIndex],
+        );
       },
     );
   }
-
 }
 
 class Dialog extends StatelessWidget {
@@ -567,43 +583,40 @@ class Dialog extends StatelessWidget {
 
   const Dialog({super.key, required this.imageUrl});
 
- @override
- Widget build(BuildContext context) {
-   return BackdropFilter(
-     filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-     child: AlertDialog(
-       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-       backgroundColor: Colors.transparent,
-       surfaceTintColor: Colors.black,
-       insetPadding: EdgeInsets.zero,
-       contentPadding: EdgeInsets.zero,
-       content: Stack(
-         children: [
-          SizedBox(
-             width: MediaQuery.of(context).size.width,
-             child: CustomWidget.imageBuilder(
-              url: imageUrl,
-              circularImage: false
-                 ),
-           ),
-           Positioned(
-            top: 10,
-            right: 10,
-            child: GestureDetector(
-              child: const Icon(
-                Icons.cancel_outlined,
-                color: Colors.white,
-                size: 40,
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
+  @override
+  Widget build(BuildContext context) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      child: AlertDialog(
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.black,
+        insetPadding: EdgeInsets.zero,
+        contentPadding: EdgeInsets.zero,
+        content: Stack(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: CustomWidget.imageBuilder(
+                  url: imageUrl, circularImage: false),
             ),
-          ),
-          
-         ],
-       ),
-     ),
-   );
- }
+            Positioned(
+              top: 10,
+              right: 10,
+              child: GestureDetector(
+                child: const Icon(
+                  Icons.cancel_outlined,
+                  color: Colors.white,
+                  size: 40,
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
