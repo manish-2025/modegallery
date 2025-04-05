@@ -7,23 +7,21 @@ import 'package:mode_gallery/utils/app_sizes.dart';
 import 'package:mode_gallery/utils/custom_widgets/custom_widget.dart';
 
 class ImageListScreen extends StatefulWidget {
- final ImageData imageData;
+  final ImageData imageData;
 
   const ImageListScreen({super.key, required this.imageData});
-
 
   @override
   State<ImageListScreen> createState() => _ImageListScreenState();
 }
 
 class _ImageListScreenState extends State<ImageListScreen> {
-
   ImageData? imageData;
   ScrollController? controller;
 
   @override
   void initState() {
-    imageData  = widget.imageData;
+    imageData = widget.imageData;
     controller = ScrollController();
     super.initState();
   }
@@ -32,19 +30,18 @@ class _ImageListScreenState extends State<ImageListScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          body: buildBody(context),
-        )
-    );
+      body: buildBody(context),
+    ));
   }
 
- Widget buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Stack(
       children: [
         CustomWidget.customAppBar(
           title: imageData!.categoryTitle!,
           leading: CustomWidget.backButton(
-              context: context,
-              onTap: ()=> Navigator.pop(context),
+            context: context,
+            onTap: () => Navigator.pop(context),
           ),
           actionButtons: [],
         ),
@@ -60,7 +57,7 @@ class _ImageListScreenState extends State<ImageListScreen> {
         ),
       ],
     );
- }
+  }
 
   Widget buildGridView() {
     return Container(
@@ -75,8 +72,8 @@ class _ImageListScreenState extends State<ImageListScreen> {
         ),
         itemCount: imageData?.categoryImages?.length,
         itemBuilder: (BuildContext ctx, index) {
-          return  Padding(
-            padding:  EdgeInsets.only(top: index==0 || index==1 ?5.h:0),
+          return Padding(
+            padding: EdgeInsets.only(top: index == 0 || index == 1 ? 5.h : 0),
             child: imageWidget(imageData!.categoryImages![index], index),
           );
         },
@@ -90,15 +87,13 @@ class _ImageListScreenState extends State<ImageListScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => FullScreenImageViewScreen(
-              imageData: widget.imageData,
-              index: index,
-            )
-          ),
+              builder: (context) => FullScreenImageViewScreen(
+                    imageData: widget.imageData,
+                    index: index,
+                  )),
         );
       },
       child: CustomWidget.imageBuilder(url: imageUrl, circularImage: true),
     );
   }
-
 }

@@ -1,0 +1,2 @@
+/Users/manishpatel/Documents/GitHub/modegallery/android/app/.cxx/Debug/274u2jz2/x86/CMakeFiles/edit_cache.dir
+/Users/manishpatel/Documents/GitHub/modegallery/android/app/.cxx/Debug/274u2jz2/x86/CMakeFiles/rebuild_cache.dir

@@ -196,12 +196,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: AppColors.appBarColor,
         body: buildBody(context),
-        floatingActionButton: floatingButton(),
-        // floatingActionButton: GetBuilder<AdController>(
-        //   builder: (newAdController){
-        //     return newAdController.rewardedAd!=null? floatingButton():SizedBox();
-        //   }
-        //   ),
+        // floatingActionButton: floatingButton(),
+        floatingActionButton: GetBuilder<AdController>(
+          builder: (newAdController) {
+            return newAdController.rewardedAd != null
+                ? floatingButton()
+                : SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -234,10 +236,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildBody(BuildContext context) {
     return GetBuilder<AdController>(builder: (newAdController) {
-      // if(newAdController.interstitialAd!=null && interShown==false){
-      //   newAdController.showInterstitialAd();
-      //   interShown = true;
-      // }
+      if (newAdController.interstitialAd != null && interShown == false) {
+        newAdController.showInterstitialAd();
+        interShown = true;
+      }
       return Stack(
         children: [
           GetBuilder<HomeScreenController>(builder: (context) {
@@ -321,11 +323,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             adController.showInterstitialAd();
                           }
                           Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ImageSliderViewer(imageData: data)))
-                              .then((value) {
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ImageSliderViewer(imageData: data),
+                            ),
+                          ).then((value) {
                             loadAd();
                           });
                         },
@@ -354,9 +357,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return GestureDetector(
                         onTap: () {
                           ///TODO show interestrial ad
-                          // if(adController.interstitialAd!=null){
-                          //   adController.showInterstitialAd();
-                          // }
+                          if (adController.interstitialAd != null) {
+                            adController.showInterstitialAd();
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -389,7 +392,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget getBannerAd() {
     if (_isLoaded == true) {
-      print("object = ==");
       return Align(
         alignment: Alignment.bottomCenter,
         child: SafeArea(
@@ -413,21 +415,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return AlertDialog(
           contentPadding: EdgeInsets.zero,
           actionsPadding: EdgeInsets.zero,
-          // title: const Text('Watch Ads'),
-          // actions: <Widget>[
-          //   TextButton(
-          //     child: const Text('No'),
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //   ),
-          //   TextButton(
-          //     child: const Text('Yes'),
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //       },
-          //   ),
-          //  ],
           content: Container(
             height: 150,
             width: 400,

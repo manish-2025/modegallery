@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:google_native_mobile_ads/google_native_mobile_ads.dart';
 
 class GetNativeAdWidget extends StatefulWidget {
   final String adUnitId;
@@ -53,7 +52,7 @@ class _GetNativeAdWidgetState extends State<GetNativeAdWidget> {
       request: const AdRequest(),
 
       /// This needs not to be changed
-      factoryId: NativeAdConfig.adFactoryId,
+      // factoryId: NativeAdConfig.adFactoryId,
       listener: NativeAdListener(
         onAdLoaded: (Ad ad) async {
           print('$NativeAd loaded.');
@@ -86,9 +85,9 @@ class _GetNativeAdWidgetState extends State<GetNativeAdWidget> {
     if (hasError) {
       return const Center(
           child: Text(
-            'Failed to load ad',
-            style: TextStyle(color: Colors.white),
-          ));
+        'Failed to load ad',
+        style: TextStyle(color: Colors.white),
+      ));
     }
     if (nativeAdIsLoaded) {
       return AdWidget(ad: nativeAd!);

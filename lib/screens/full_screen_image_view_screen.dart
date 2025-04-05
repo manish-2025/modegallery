@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:async_wallpaper/async_wallpaper.dart';
+// import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -12,6 +12,7 @@ import 'package:mode_gallery/model/home_data_model.dart';
 import 'package:mode_gallery/utils/app_colors.dart';
 import 'package:mode_gallery/utils/app_sizes.dart';
 import 'package:mode_gallery/utils/custom_widgets/custom_widget.dart';
+// import 'package:wallpaper_handler/wallpaper_handler.dart';
 
 class FullScreenImageViewScreen extends StatefulWidget {
   final ImageData imageData;
@@ -382,9 +383,9 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 callBack: () {
                   Navigator.pop(context);
                   if (rewardedAd != null) {
-                    showRewardedAd(id: AsyncWallpaper.HOME_SCREEN);
+                    showRewardedAd(id: 1);
                   } else {
-                    setWallpaper(wallPaperLocation: AsyncWallpaper.HOME_SCREEN);
+                    setWallpaper(wallPaperLocation: 1);
                   }
                 },
                 iconData: Icons.home,
@@ -395,9 +396,9 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 callBack: () {
                   Navigator.pop(context);
                   if (rewardedAd != null) {
-                    showRewardedAd(id: AsyncWallpaper.LOCK_SCREEN);
+                    showRewardedAd(id: 2);
                   } else {
-                    setWallpaper(wallPaperLocation: AsyncWallpaper.LOCK_SCREEN);
+                    setWallpaper(wallPaperLocation: 2);
                   }
                 },
                 iconData: Icons.lock_clock_rounded,
@@ -408,10 +409,9 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 callBack: () {
                   Navigator.pop(context);
                   if (rewardedAd != null) {
-                    showRewardedAd(id: AsyncWallpaper.BOTH_SCREENS);
+                    showRewardedAd(id: 3);
                   } else {
-                    setWallpaper(
-                        wallPaperLocation: AsyncWallpaper.BOTH_SCREENS);
+                    setWallpaper(wallPaperLocation: 3);
                   }
                 },
                 iconData: Icons.home_work,
