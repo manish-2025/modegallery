@@ -1,18 +1,17 @@
 import 'dart:io';
 import 'dart:ui';
-// import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mode_gallery/common/app_constants.dart';
+import 'package:mode_gallery/controller/ad_controller/ad_controller.dart';
 import 'package:mode_gallery/controller/wallpaper_setting_controller.dart';
 import 'package:mode_gallery/model/home_data_model.dart';
 import 'package:mode_gallery/utils/app_colors.dart';
 import 'package:mode_gallery/utils/app_sizes.dart';
 import 'package:mode_gallery/utils/custom_widgets/custom_widget.dart';
-// import 'package:wallpaper_handler/wallpaper_handler.dart';
 
 class FullScreenImageViewScreen extends StatefulWidget {
   final ImageData imageData;
@@ -31,6 +30,8 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
       Get.put(WallpaperSettingController());
   int selectedIndex = 10;
   PageController? controller;
+
+  AdController adController = Get.put(AdController());
 
   static const AdRequest request = AdRequest(
     keywords: <String>['foo', 'bar'],
@@ -57,25 +58,18 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
-        // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
-          print("object = ==");
           setState(() {
             _isLoaded = true;
           });
         },
-        // Called when an ad request failed.
         onAdFailedToLoad: (ad, err) {
           debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
           ad.dispose();
         },
-        // Called when an ad opens an overlay that covers the screen.
         onAdOpened: (Ad ad) {},
-        // Called when an ad removes an overlay that covers the screen.
         onAdClosed: (Ad ad) {},
-        // Called when an impression occurs on the ad.
         onAdImpression: (Ad ad) {},
       ),
     )..load();
@@ -93,17 +87,13 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
             });
           },
           onAdFailedToLoad: (ad, error) {
-            // Dispose the ad here to free resources.
             debugPrint('$NativeAd failed to load: $error');
             ad.dispose();
           },
         ),
         request: const AdRequest(),
-        // Styling
         nativeTemplateStyle: NativeTemplateStyle(
-            // Required: Choose a template.
             templateType: TemplateType.small,
-            // Optional: Customize the ad's style.
             mainBackgroundColor: Colors.purple,
             cornerRadius: 10.0,
             callToActionTextStyle: NativeTemplateTextStyle(
@@ -127,6 +117,7 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
                 style: NativeTemplateFontStyle.normal,
                 size: 16.0)))
       ..load();
+    // adController.createInterstitialAd();
   }
 
   @override
@@ -136,30 +127,45 @@ class _FullScreenImageViewScreenState extends State<FullScreenImageViewScreen> {
     createRewardedAd();
     loadBannerAd();
     loadNativeAd();
+    // adController.createInterstitialAd();
     super.initState();
+  }
+
+  Future<bool> _onWillPop() async {
+    if (adController.interstitialAd != null) {
+      adController.showInterstitialAd();
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      backgroundColor: AppColors.appBackgroundColor,
-      appBar: AppBar(
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
-              Icons.arrow_back_ios,
-              color: AppColors.appBarTitleColor,
-            )),
-        title: Text(
-          widget.imageData.categoryTitle ?? '',
-          style: TextStyle(color: AppColors.appBarTitleColor),
+        // ignore: deprecated_member_use
+        child: WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: AppColors.appBackgroundColor,
+        appBar: AppBar(
+          leading: GestureDetector(
+              onTap: () {
+                if (adController.interstitialAd != null) {
+                  adController.showInterstitialAd();
+                }
+                Navigator.pop(context);
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.appBarTitleColor,
+              )),
+          title: Text(
+            widget.imageData.categoryTitle ?? '',
+            style: TextStyle(color: AppColors.appBarTitleColor),
+          ),
+          backgroundColor: AppColors.appBarColor,
         ),
-        backgroundColor: AppColors.appBarColor,
+        body: buildBody(context),
       ),
-      body: buildBody(context),
     ));
   }
 

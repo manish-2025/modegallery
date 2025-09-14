@@ -16,9 +16,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
           title: 'Flutter Demo',
@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
           ),
           home: child,
         );
-
       },
       child: const HomeScreen(),
     );

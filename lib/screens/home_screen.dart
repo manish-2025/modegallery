@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
-          print("object = ==");
+          // print("object = ==");
           setState(() {
             _isLoaded = true;
           });
@@ -167,9 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
     adController.createRewardedAd();
 
     ///TODO load interestrial ad
-    // adController.createInterstitialAd();
+    adController.createInterstitialAd();
     // adController.createRewardedInterstitialAd();
-    adController.createBannerAd();
     loadAd();
     loadNativeAd();
     super.initState();
@@ -177,76 +176,64 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: AppColors.whiteColor),
-          backgroundColor: AppColors.appBarColor,
-          title: Text(
-            AppConstant.homeScreenTitle,
-            style: TextStyle(
-                color: AppColors.appBarTitleColor,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.w600),
+    return GetBuilder<AdController>(builder: (newAdController) {
+      if (newAdController.interstitialAd != null && interShown == false) {
+        interShown = true;
+      }
+      return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: AppColors.whiteColor),
+            backgroundColor: AppColors.appBarColor,
+            title: Text(
+              AppConstant.homeScreenTitle,
+              style: TextStyle(
+                  color: AppColors.appBarTitleColor,
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600),
+            ),
+            actions: [
+              newAdController.rewardedAd != null
+                  ? GestureDetector(
+                      onTap: () {
+                        adController.showRewardedAd();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(width: 1, color: Colors.blue),
+                        ),
+                        child: Image.network(
+                          'https://media.tenor.com/BGvMyk6LJk8AAAAj/fpt-light.gif',
+                          height: 40,
+                        ),
+                      ),
+                    )
+                  : SizedBox(width: 5),
+              SizedBox(width: 5),
+            ],
           ),
-        ),
-        drawer: Drawer(
-          backgroundColor: AppColors.appBarColor,
-          child: buildDrawer(),
-        ),
-        backgroundColor: AppColors.appBarColor,
-        body: buildBody(context),
-        // floatingActionButton: floatingButton(),
-        floatingActionButton: GetBuilder<AdController>(
-          builder: (newAdController) {
-            return newAdController.rewardedAd != null
-                ? floatingButton()
-                : SizedBox();
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget floatingButton() {
-    return GestureDetector(
-      onTap: () {
-        // loadDialogNativeAd();
-        // _showAlertDialog();
-        adController.showRewardedAd();
-        // adController.showInterstitialAd();
-        // adController.showRewardedInterstitialAd();
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.blueColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 1, color: Colors.red),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Watch Ads",
-            style: TextStyle(color: AppColors.whiteColor),
+          drawer: Drawer(
+            backgroundColor: AppColors.appBarColor,
+            child: buildDrawer(),
           ),
+          backgroundColor: AppColors.appBarColor,
+          body: buildBody(context),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget buildBody(BuildContext context) {
-    return GetBuilder<AdController>(builder: (newAdController) {
-      if (newAdController.interstitialAd != null && interShown == false) {
-        newAdController.showInterstitialAd();
-        interShown = true;
-      }
-      return Stack(
-        children: [
-          GetBuilder<HomeScreenController>(builder: (context) {
+    return Stack(
+      children: [
+        GetBuilder<HomeScreenController>(
+          builder: (context) {
             return Container(
               height: ScreenUtil().screenHeight,
               width: ScreenUtil().screenWidth,
-              // padding: EdgeInsets.only(top: AppSizes().appBarHeight),
+              padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 50),
               decoration: BoxDecoration(
                   color: AppColors.appBackgroundColor,
                   gradient: LinearGradient(
@@ -259,25 +246,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   )),
               child: buildImageDataList(),
             );
-          }),
-          // CustomWidget.customAppBar(
-          //   title: AppConstant.homeScreenTitle,
-          //   actionButtons: [],
-          // ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: getBannerAd(),
-          ),
-        ],
-      );
-    });
+          },
+        ),
+        // CustomWidget.customAppBar(
+        //   title: AppConstant.homeScreenTitle,
+        //   actionButtons: [],
+        // ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: getBannerAd(),
+        ),
+      ],
+    );
   }
 
   Widget buildImageDataList() {
-    return Container(
-      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+    return SingleChildScrollView(
       child: ListView.separated(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -319,9 +305,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Spacer(),
                     GestureDetector(
                         onTap: () {
-                          if (adController.interstitialAd != null) {
-                            adController.showInterstitialAd();
-                          }
+                          // if (adController.interstitialAd != null) {
+                          //   adController.showInterstitialAd();
+                          // }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -357,9 +343,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       return GestureDetector(
                         onTap: () {
                           ///TODO show interestrial ad
-                          if (adController.interstitialAd != null) {
-                            adController.showInterstitialAd();
-                          }
+                          // if (adController.interstitialAd != null) {
+                          //   adController.showInterstitialAd();
+                          // }
                           Navigator.push(
                             context,
                             MaterialPageRoute(

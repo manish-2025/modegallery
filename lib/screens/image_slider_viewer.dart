@@ -45,7 +45,6 @@ class _ImageSliderViewerState extends State<ImageSliderViewer> {
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
-        // Called when an ad is successfully received.
         onAdLoaded: (ad) {
           debugPrint('$ad loaded.');
           print("object = ==");
@@ -53,17 +52,13 @@ class _ImageSliderViewerState extends State<ImageSliderViewer> {
             _isLoaded = true;
           });
         },
-        // Called when an ad request failed.
         onAdFailedToLoad: (ad, err) {
           debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
+
           ad.dispose();
         },
-        // Called when an ad opens an overlay that covers the screen.
         onAdOpened: (Ad ad) {},
-        // Called when an ad removes an overlay that covers the screen.
         onAdClosed: (Ad ad) {},
-        // Called when an impression occurs on the ad.
         onAdImpression: (Ad ad) {},
       ),
     )..load();
@@ -118,117 +113,48 @@ class _ImageSliderViewerState extends State<ImageSliderViewer> {
     pageController = PageController();
     loadAd();
     loadNativeAd();
+    // adController.createInterstitialAd();
     super.initState();
+  }
+
+  Future<bool> _onWillPop() async {
+    if (adController.interstitialAd != null) {
+      adController.showInterstitialAd();
+    }
+    return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.appBarTitleColor,
-              )),
-          centerTitle: true,
-          title: Text(
-            widget.imageData.categoryTitle ?? '',
-            style: TextStyle(color: AppColors.appBarTitleColor),
+      // ignore: deprecated_member_use
+      child: WillPopScope(
+        onWillPop: _onWillPop,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: GestureDetector(
+                onTap: () {
+                  if (adController.interstitialAd != null) {
+                    adController.showInterstitialAd();
+                  }
+                  Navigator.pop(context);
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: AppColors.appBarTitleColor,
+                )),
+            centerTitle: true,
+            title: Text(
+              widget.imageData.categoryTitle ?? '',
+              style: TextStyle(color: AppColors.appBarTitleColor),
+            ),
+            backgroundColor: AppColors.appBarColor,
           ),
-          backgroundColor: AppColors.appBarColor,
+          body: buildBody(),
         ),
-        body: buildBody(),
       ),
     );
   }
-
-  //  Widget buildBody(BuildContext context) {
-  //    return Stack(
-  //      children: [
-  //        SizedBox(
-  //          height: ScreenUtil().screenHeight,
-  //          width: ScreenUtil().screenWidth,
-  //          child: CachedNetworkImage(
-  //            height: ScreenUtil().screenHeight,
-  //            width: ScreenUtil().screenWidth,
-  //            imageUrl: "https://cdn.pixabay.com/photo/2023/08/20/08/16/ai-generated-8201916_640.png",
-  //            fit: BoxFit.fill,
-  //          ),
-  //        ),
-  //        SizedBox(
-  //          height: ScreenUtil().screenHeight,
-  //          width: ScreenUtil().screenWidth,
-  //          // child: homeBannerSlider(imageData: widget.imageData),
-  //          child: Column(
-  //            children: [
-  //              CarouselWithIndicator(
-  //                  imageData: widget.imageData,
-  //                  wallpaperSettingController: wallpaperSettingController
-  //              ),
-  //
-  //            ],
-  //          ),
-  //        ),
-  //      ],
-  //    );
-  // }
-  //  Widget homeBannerSlider({required ImageData? imageData}) {
-  //    return Container(
-  //      padding: EdgeInsets.symmetric(horizontal: 14.w),
-  //      child: ClipRRect(
-  //          borderRadius: BorderRadius.circular(20.r),
-  //          child: CarouselSlider(
-  //            options: CarouselOptions(
-  //              height: ScreenUtil().screenHeight * 0.7,
-  //              autoPlay: true,
-  //              viewportFraction: 1,
-  //              autoPlayInterval: const Duration(seconds: 5),
-  //              autoPlayCurve: Curves.fastOutSlowIn,
-  //              onPageChanged: (index, reason) {
-  //                setState(() {
-  //                  // _current = index;
-  //                });
-  //              },
-  //            ),
-  //            items: imageData!.categoryImages!
-  //                .map(
-  //                  (singleBanner) => Builder(
-  //                builder: (BuildContext context) => InkWell(
-  //                  child: ClipRRect(
-  //                      borderRadius: BorderRadius.circular(00),
-  //                      child: Platform.isAndroid
-  //                          ? CachedNetworkImage(
-  //                        imageUrl: singleBanner!,
-  //                        width: ScreenUtil().screenWidth,
-  //                        fit: BoxFit.cover,
-  //                        placeholder: (context, url) => CustomWidget.loadingWidget(),
-  //                        errorWidget: (context, error, stackTrace) => const SizedBox.shrink(),
-  //                      )
-  //                          : Image.network(
-  //                        singleBanner,
-  //                        cacheWidth: ScreenUtil().screenWidth.toInt(),
-  //                        width: ScreenUtil().screenWidth,
-  //                        cacheHeight: 180.h.toInt(),
-  //                        fit: BoxFit.fitWidth,
-  //                        loadingBuilder: (context, child, loadingProgress) {
-  //                          if (loadingProgress == null) {
-  //                            return child;
-  //                          } else {
-  //                            return CustomWidget.loadingWidget();
-  //                          }
-  //                        },
-  //                      )),
-  //                ),
-  //              ),
-  //            )
-  //                .toList(),
-  //          )),
-  //    );
-  //  }
 
   Widget buildBody() {
     return Stack(
@@ -299,8 +225,8 @@ class _ImageSliderViewerState extends State<ImageSliderViewer> {
         if (_nativeAdIsLoaded) ...{
           ConstrainedBox(
             constraints: const BoxConstraints(
-              minWidth: 250, // minimum recommended width
-              minHeight: 90, // minimum recommended height
+              minWidth: 250,
+              minHeight: 90,
               maxWidth: 300,
               maxHeight: 100,
             ),

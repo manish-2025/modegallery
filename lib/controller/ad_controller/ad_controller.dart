@@ -1,14 +1,9 @@
-
-
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AdController extends GetxController{
-
-  String adId ="ca-app-pub-3940256099942544/1033173712";
+class AdController extends GetxController {
+  String adId = "ca-app-pub-3940256099942544/1033173712";
   int maxFailedLoadAttempts = 3;
 
   static const AdRequest request = AdRequest(
@@ -23,33 +18,32 @@ class AdController extends GetxController{
   int numRewardedLoadAttempts = 0;
   RewardedInterstitialAd? rewardedInterstitialAd;
   int numRewardedInterstitialLoadAttempts = 0;
-  BannerAd? bannerAd;
-  int numBannerLoadAttempts = 0;
+  // BannerAd? bannerAd;
+  // int numBannerLoadAttempts = 0;
 
+  // void createBannerAd() {
+  //   bannerAd = BannerAd(
+  //     adUnitId: adId,
+  //     request: const AdRequest(),
+  //     size: AdSize.banner,
+  //     listener: BannerAdListener(
+  //       onAdLoaded: (ad) {
+  //         update();
+  //       },
+  //       onAdFailedToLoad: (ad, err) {
+  //         debugPrint('BannerAd failed to load: $err');
+  //         ad.dispose();
+  //       },
+  //     ),
+  //   )..load();
+  // }
 
-  void createBannerAd() {
-    bannerAd = BannerAd(
-      adUnitId: adId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          update();
-        },
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('BannerAd failed to load: $err');
-          ad.dispose();
-        },
-      ),
-    )..load();
-  }
-
-  void showBannerAd (){
-    if (bannerAd == null) {
-      print('Warning: attempt to show interstitial before loaded.');
-      return;
-    }
-  }
+  // void showBannerAd() {
+  //   if (bannerAd == null) {
+  //     print('Warning: attempt to show interstitial before loaded.');
+  //     return;
+  //   }
+  // }
 
   void createInterstitialAd() {
     InterstitialAd.load(
@@ -115,7 +109,7 @@ class AdController extends GetxController{
             print('RewardedAd failed to load: $error');
             rewardedAd = null;
             numRewardedLoadAttempts += 1;
-            if (numRewardedLoadAttempts <maxFailedLoadAttempts) {
+            if (numRewardedLoadAttempts < maxFailedLoadAttempts) {
               createRewardedAd();
             }
           },
@@ -144,10 +138,9 @@ class AdController extends GetxController{
     );
 
     rewardedAd!.setImmersiveMode(true);
-    rewardedAd!.show(
-        onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-          print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-        });
+    rewardedAd!.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+    });
     rewardedAd = null;
     update();
   }
@@ -183,27 +176,26 @@ class AdController extends GetxController{
     }
     rewardedInterstitialAd!.fullScreenContentCallback =
         FullScreenContentCallback(
-          onAdShowedFullScreenContent: (RewardedInterstitialAd ad) =>
-              print('$ad onAdShowedFullScreenContent.'),
-          onAdDismissedFullScreenContent: (RewardedInterstitialAd ad) {
-            print('$ad onAdDismissedFullScreenContent.');
-            ad.dispose();
-            createRewardedInterstitialAd();
-          },
-          onAdFailedToShowFullScreenContent:
-              (RewardedInterstitialAd ad, AdError error) {
-            print('$ad onAdFailedToShowFullScreenContent: $error');
-            ad.dispose();
-            createRewardedInterstitialAd();
-          },
-        );
+      onAdShowedFullScreenContent: (RewardedInterstitialAd ad) =>
+          print('$ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (RewardedInterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        createRewardedInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent:
+          (RewardedInterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        createRewardedInterstitialAd();
+      },
+    );
     rewardedInterstitialAd!.setImmersiveMode(true);
     rewardedInterstitialAd!.show(
         onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-          print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
-        });
+      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type})');
+    });
     rewardedInterstitialAd = null;
     update();
   }
-
 }

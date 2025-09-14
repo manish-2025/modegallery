@@ -53,7 +53,6 @@ class CustomWidget {
   }
 
   static imageBuilder({required String url, required bool circularImage}) {
-    print("object === ${url}");
     if (url.startsWith("http") || url.startsWith("https")) {
       return Container(
         alignment: Alignment.center,
